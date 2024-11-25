@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Include your CSS file -->
+</head>
+<body>
+    <header>
+        <h1>Transaction History</h1>
+        <a href="/user-balance">Back to Balance</a> <!-- Link to balance page -->
+    </header>
+
+    <main>
+        <% if (transactions && transactions.length > 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Transaction Date</th>
+                        <th>Transaction Type</th>
+                        <th>Amount</th>
+                        <th>Balance After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% transactions.forEach(transaction => { %>
+                        <% transaction.history.forEach(entry => { %>
+                            <tr>
+                                <td><%= new Date(entry.date).toLocaleString() %></td>
+                                <td><%= entry.type %></td>
+                                <td><%= entry.amount %></td>
+                                <td><%= entry.balanceAfter %></td>
+                            </tr>
+                        <% }); %>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No transactions found.</p>
+        <% } %>
+    </main>
+</body>
+</html>

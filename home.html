@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Options</title>
+    <style>
+        /* Add your styles here */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #6e7f80, #4c5c61);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .title {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #4caf50;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:nth-child(1) { background-color: #2196F3; }
+        .button:nth-child(2) { background-color: #ff9800; }
+        .button:nth-child(3) { background-color: #f44336; }
+        .button:nth-child(4) { background-color: #9c27b0; }
+
+        .button:nth-child(1):hover { background-color: #1976D2; }
+        .button:nth-child(2):hover { background-color: #fb8c00; }
+        .button:nth-child(3):hover { background-color: #d32f2f; }
+        .button:nth-child(4):hover { background-color: #7b1fa2; }
+
+        .button:focus {
+            outline: none;
+        }
+
+        #balanceDisplay {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="title">Hello</h1>
+        <h1 class="title">Payment Options</h1>
+        <div class="button-container">
+            <a href="search.html" class="button">To Pay</a>
+            <a href="#" class="button">Self Pay</a>
+            <button onclick="checkBalance()" class="button">Check Balance</button>
+            <a href="#" class="button">History</a>
+        </div>
+        <div id="balanceDisplay"></div> <!-- Display balance here -->
+    </div>
+
+    <script>
+        async function checkBalance() {
+            const balanceDisplay = document.getElementById('balanceDisplay');
+            balanceDisplay.innerText = 'Checking balance...'; // Indicate loading
+
+            try {
+                const response = await fetch('/user-balance');
+                const data = await response.json();
+
+                if (data.success) {
+                    balanceDisplay.innerText = `Current Balance: ₹${data.balance}`;
+                } else {
+                    balanceDisplay.innerText = `Error: ${data.message}`;
+                }
+            } catch (error) {
+                balanceDisplay.innerText = 'Failed to retrieve balance. Please try again.';
+            }
+        }
+    </script>
+</body>
+</html>

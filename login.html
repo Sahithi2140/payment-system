@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form method="POST" action="/submit">
+            
+            <input type="text" placeholder="Account no." name="account_number" required>
+            <input type="password" placeholder="upi pin"  name="upi_pin" required>
+            <button type="submit" class="submit-btn"> Submit  </button>
+        </form>
+        <div class="login-footer">
+            <a href="forgot password.html">Forgot pin?</a>
+            <a href="signup.html">Sign Up</a>
+        </div>
+    </div>
+    <script>
+        async function searchAccount() {
+            const accountNumber = document.getElementById('accountNumber').value;
+            const response = await fetch(`/search?account_number=${accountNumber}`);
+            const data = await response.json();
+
+            const resultDiv = document.getElementById('result');
+            if (data.message) {
+                resultDiv.innerText = data.message;
+            } else {
+                resultDiv.innerText = `Account Holder: ${data.account_name}`;
+            }
+        }
+    </script>
+</body>
+</html>

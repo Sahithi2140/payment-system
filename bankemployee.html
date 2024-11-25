@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bank Employee Dashboard</title>
+  <link rel="stylesheet" href="css/bankemployee.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Bank Employee Dashboard</h1>
+      <p>Manage customer accounts efficiently</p>
+    </header>
+
+    <section class="form-section">
+      <h2>Account Actions</h2>
+      <div class="input-group">
+        <label for="accountNumber">Account Number</label>
+        <input type="text" id="accountNumber" placeholder="Enter account number">
+      </div>
+
+      <button onclick="performAction('checkBalance')">Check Balance</button>
+      <button onclick="performAction('transactionHistory')">View Transaction History</button>
+      
+      <h2>Transactions</h2>
+      <div class="transaction-group">
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" placeholder="Enter amount">
+      </div>
+      <button onclick="performAction('deposit')">Deposit</button>
+      <button onclick="performAction('withdraw')">Withdraw</button>
+      <button onclick="performAction('transfer')">Transfer</button>
+    </section>
+
+    <section id="results" class="results">
+      <h2>Results</h2>
+      <div id="resultContent">
+        <!-- Dynamic content will be displayed here -->
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function performAction(action) {
+      const accountNumber = document.getElementById("accountNumber").value;
+      const amount = document.getElementById("amount").value;
+
+      // Example AJAX call to your backend
+      fetch(`/api/${action}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ accountNumber, amount })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("resultContent").innerText = JSON.stringify(data, null, 2);
+      })
+      .catch(error => console.error("Error:", error));
+    }
+  </script>
+</body>
+</html>

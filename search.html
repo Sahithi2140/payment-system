@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Account</title>
+    <link rel="stylesheet" href="css/search.css">
+</head>
+<body>
+    <div class="container">
+        <form class="search-form" id="searchForm">
+            <h1>Search Account</h1>
+            
+            <label for="accountNumber">Account Number</label>
+            <input type="text" id="accountNumber" name="account_number" placeholder="Enter Account Number" required>
+            <button type="button" onclick="searchAccount()">Search</button>
+
+            <div id="result" class="result"></div>
+        </form>
+
+        <!-- Payment fields, initially hidden -->
+        <div id="paymentSection" style="display: none;">
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" name="amount" placeholder="Enter Amount" min="1" required>
+            <button type="button" onclick="showUpiPinField()">Pay</button>
+        </div>
+
+        <!-- UPI PIN field, initially hidden -->
+        <div id="upiPinSection" style="display: none;">
+            <label for="upiPin">UPI PIN</label>
+            <input type="password" id="upiPin" name="upi_pin" placeholder="Enter UPI PIN" required>
+            <button type="button" onclick="payAmount()">Confirm Payment</button>
+        </div>
+    </div>
+
+    <script>
+        async function searchAccount() {
+            const accountNumber = document.getElementById('accountNumber').value;
+            const response = await fetch(`/search`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ account_number: accountNumber })
+            });
+
+            const data = await response.json();
+            const resultDiv = document.getElementById('result');
+            const paymentSection = document.getElementById('paymentSection');
+
+            if (data.exists) {
+                resultDiv.innerText = `Account Found: ${data.username}`;
+                paymentSection.style.display = 'block';
+            } else {
+                resultDiv.innerText = 'Account not found. Please try again.';
+                paymentSection.style.display = 'none';
+            }
+        }
+
+        function showUpiPinField() {
+            document.getElementById('upiPinSection').style.display = 'block';
+        }
+
+        async function payAmount() {
+            const accountNumber = document.getElementById('accountNumber').value;
+            const amount = document.getElementById('amount').value;
+            const upiPin = document.getElementById('upiPin').value;
+
+            const response = await fetch(`/pay`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ account_number: accountNumber, amount: amount, upi_pin: upiPin })
+            });
+
+            const data = await response.json();
+            const resultDiv = document.getElementById('result');
+
+            if (data.success) {
+                resultDiv.innerText = 'Payment successful!';
+            } else {
+                resultDiv.innerText = `Payment failed: ${data.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
+
